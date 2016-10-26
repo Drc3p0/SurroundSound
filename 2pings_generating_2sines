@@ -1,5 +1,4 @@
-//2 ping sensors.  one controls amplitude, the other a sine wave within a specified frequency.  Written by Darcy Neal www.ladybrainstudios.com
-//
+//2 ping sensors playing 2 sine waves for a dual handed theremin.
 
 //Ultrasonic Sensor SoftPing  https://bitbucket.org/teckel12/arduino-new-ping/wiki/Home
 #include <NewPing.h>
@@ -76,11 +75,7 @@ void loop() {
                                 rawSine1 =  map(rawPing1, 0, 30, 20, 250);//map it to the frequency range desired...  could this be done on a logarithmic curve??
                                 
                                 //sine_fm1.frequency(rawSine1);
-                                //sine_fm1.phase(0); //angle 0-360
-                                Serial.print(" rawSine1= ");
-                                Serial.println (rawSine1);
-                                //Serial1.println("sin");
-                                //Serial1.println(rawSine1);
+                                //sine_fm1.phase(0); //angle 0-360                             
                                 sine_fm1.amplitude(1.0);  //Set the amplitude, from 0 to 1.0.
                                 
                                 //inserted trying to ramp sine
@@ -92,14 +87,14 @@ void loop() {
                         else {
                                 //Sine_ramper = 0;  //if sensor is outside of range, set sine to 0
                                 rawSine1 = 0;
-                                Serial.print(" rawSine1= ");
-                                Serial.println (rawSine1);
-                        }
 
+                        }
+                        Serial.print(" rawSine1= ");
+                        Serial.print (rawSine1);
                         sine_fm1.frequency(rawSine1);
                         //sine_fm1.frequency(Sine_ramper);
-                        Serial.print (" Sine_ramper ");
-                        Serial.print (Sine_ramper);
+                        //Serial.print (" Sine_ramper ");
+                        //Serial.print (Sine_ramper);
                      
 
 
@@ -117,10 +112,7 @@ void loop() {
                                 
                                 //sine_fm1.frequency(rawSine2);
                                 //sine_fm1.phase(0); //angle 0-360
-                                Serial.print(" rawSine2= ");
-                                Serial.println (rawSine2);
-                                //Serial1.println("sin");
-                                //Serial1.println(rawSine2);
+
                                 sine_fm1.amplitude(1.0);  //Set the amplitude, from 0 to 1.0.
                                 
                                 //inserted trying to ramp sine
@@ -132,14 +124,14 @@ void loop() {
                         else {
                                 //Sine_ramper = 0;  //if sensor is outside of range, set sine to 0
                                 rawSine2 = 0;
-                                Serial.print(" rawSine2= ");
-                                Serial.println (rawSine2);
-                        }
 
+                        }
+                        Serial.print(" rawSine2= ");
+                        Serial.println (rawSine2);
                         sine_fm1.frequency(rawSine2);
                         //sine_fm1.frequency(Sine_ramper);
-                        Serial.print (" Sine_ramper ");
-                        Serial.print (Sine_ramper);
+                        //Serial.print (" Sine_ramper ");
+                        //Serial.print (Sine_ramper);
                      
                 }
         }
