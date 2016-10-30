@@ -54,8 +54,11 @@ void setup() {
         audioShield.inputSelect(AUDIO_INPUT_LINEIN);
         //audioShield.inputSelect(AUDIO_INPUT_MIC); // audioShield.inputSelect(AUDIO_INPUT_LINEIN);
         //pinMode(LED_BUILTIN, OUTPUT);
-        Serial.begin(115200); //higher baud for ping
+        //Serial.begin(115200); //higher baud for ping
         //Serial1.begin(115200);
+        // Configure the PWM bit depth & rate for the Teensy to 5 (0-31) and 125 kHz (LCM of highest supported rates given clock speed)
+        analogWriteResolution(5);
+        analogWriteFrequency(3, 125000);  // setting this on pin 3 will also affect pin 4
 }
 
 void loop() {
@@ -67,8 +70,9 @@ void loop() {
                 if (whichPing ==1) {
                         whichPing = 2;
                         rawPing1 = sonar1.ping_cm(); //raw ultrasonic value
-                        Serial.print ("rawPing1=  ");
-                        Serial.print (rawPing1);
+                        //Serial.print ("rawPing1=  ");
+                        //Serial.print (rawPing1);
+                        analogWrite(3, rawPing1);
 
                       //sine generator interjected into 1st ping check
                         if (rawPing1 >= 1 && rawPing1 <= 30) { //if sensor is triggered within the detection range
@@ -89,8 +93,8 @@ void loop() {
                                 rawSine1 = 0;
 
                         }
-                        Serial.print(" rawSine1= ");
-                        Serial.print (rawSine1);
+                        //Serial.print(" rawSine1= ");
+                        //Serial.print (rawSine1);
                         sine_fm1.frequency(rawSine1);
                         //sine_fm1.frequency(Sine_ramper);
                         //Serial.print (" Sine_ramper ");
@@ -102,9 +106,10 @@ void loop() {
                 //get values from ping 2
                 else {
                         rawPing2 = sonar2.ping_cm(); //raw ultrasonic value
-                        Serial.print ("rawPing2=  ");
-                        Serial.print (rawPing2);
+                        //Serial.print ("rawPing2=  ");
+                        //Serial.print (rawPing2);
                         whichPing = 1;
+                        analogWrite(4, rawPing2);
 
                         //sine generator interjected into 2nd ping check
                         if (rawPing2 >= 1 && rawPing2 <= 30) { //if sensor is triggered within the detection range
@@ -126,8 +131,8 @@ void loop() {
                                 rawSine2 = 0;
 
                         }
-                        Serial.print(" rawSine2= ");
-                        Serial.println (rawSine2);
+                        //Serial.print(" rawSine2= ");
+                        //Serial.println (rawSine2);
                         sine_fm1.frequency(rawSine2);
                         //sine_fm1.frequency(Sine_ramper);
                         //Serial.print (" Sine_ramper ");
