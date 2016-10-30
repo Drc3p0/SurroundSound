@@ -259,14 +259,13 @@ void loop() {
   // Some example procedures showing how to display to the pixels:
   showFrame();
   //showColor(255,255,255);
-  stringOffset = (stringOffset + 1) % QUANTA;
+  stringOffset = stringOffset + map(analogRead(A0), 0, 620, 0, 10);
+  stringOffset %= QUANTA;
   counter++;
   if (counter % 2 == 0) {
     beatOffset = (beatOffset + 1) % QUANTA;
   }
-  if (counter % 4 == 0) {
-    colorIndex = (int) 49 - (49 * cos(counter / 200.0 * PI));
-  }
+  colorIndex = min(map(analogRead(A1), 0, 620, 0, 100), QUANTA - 1);
   if (counter % 20 == 0) {
     beatIntensity = (beatIntensity + 0.1);
     if (beatIntensity > 1.01)
