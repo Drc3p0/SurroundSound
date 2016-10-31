@@ -5,7 +5,7 @@
 
 // Change this to be at least as long as your pixel string (too long will work fine, just be a little slower)
 
-#define PIXELS 80  // Number of pixels in the inner lower string
+#define PIXELS 82  // Number of pixels in the inner lower string
 
 // These values depend on which pin your string is connected to and what board you are using 
 // More info on how to find these at http://www.arduino.cc/en/Reference/PortManipulation
@@ -177,7 +177,7 @@ void show() {
 
 void showColor(unsigned char r, unsigned char g, unsigned char b) {
   cli();
-  for (int p = 0; p < 2; p++) {
+  for (int p = 0; p < 20; p++) {
     sendPixel( r , g , b );
   }
   sei();
@@ -204,8 +204,8 @@ void showFrame() {
   for (int p = 0; p < PIXELS; p++) {
     sendPixel(rVal[p], gVal[p], bVal[p]);
   }
-  sei();
   show();
+  sei();
 }
 
 
@@ -259,13 +259,16 @@ void loop() {
   // Some example procedures showing how to display to the pixels:
   showFrame();
   //showColor(255,255,255);
-  stringOffset = stringOffset + map(analogRead(A0), 0, 620, 0, 10);
+  //stringOffset = stringOffset + map(analogRead(A0), 400, 1000, 0, 10);
+  stringOffset++;
   stringOffset %= QUANTA;
   counter++;
   if (counter % 2 == 0) {
     beatOffset = (beatOffset + 1) % QUANTA;
   }
-  colorIndex = min(map(analogRead(A1), 0, 620, 0, 100), QUANTA - 1);
+  //colorIndex = min(map(analogRead(A1), 400, 1000, 100, 0), QUANTA - 1);
+  colorIndex += 1;
+  colorIndex %= QUANTA;
   if (counter % 20 == 0) {
     beatIntensity = (beatIntensity + 0.1);
     if (beatIntensity > 1.01)
