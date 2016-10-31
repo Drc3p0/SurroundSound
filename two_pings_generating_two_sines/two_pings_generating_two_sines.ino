@@ -45,14 +45,15 @@ const float MAX_RAW_VOLUME = 20;
 unsigned int raw_vol = 0;
 unsigned int raw_interactive_vol = 0;
 unsigned int smoothSine = 0;
-unsigned int Sine_ramper = 0;
-
+unsigned int Sine_ramper1 = 0;
+unsigned int Sine_ramper2 = 0;
 
 void setup() {
         AudioMemory(100); // detailed information, see the MemoryAndCpuUsage example
         audioShield.enable();
         audioShield.inputSelect(AUDIO_INPUT_LINEIN);
         //audioShield.inputSelect(AUDIO_INPUT_MIC); // audioShield.inputSelect(AUDIO_INPUT_LINEIN);
+        audioShield.volume(0.8);
         //pinMode(LED_BUILTIN, OUTPUT);
         //Serial.begin(115200); //higher baud for ping
         //Serial1.begin(115200);
@@ -83,22 +84,22 @@ void loop() {
                                 sine_fm1.amplitude(1.0);  //Set the amplitude, from 0 to 1.0.
                                 
                                 //inserted trying to ramp sine
-                      //           if (Sine_ramper < rawSine1) { //ramp up/down to sensor volume
-                      //                  Sine_ramper += 1;}
-                      //           else if (Sine_ramper > rawSine1) {
-                      //               Sine_ramper -= 1; }
+                                 if (Sine_ramper1 < rawSine1) { //ramp up/down to sensor volume
+                                        Sine_ramper1 += 1;}
+                                 else if (Sine_ramper1 > rawSine1) {
+                                     Sine_ramper1 -= 1; }
                         }
                         else {
-                                //Sine_ramper = 0;  //if sensor is outside of range, set sine to 0
+                                //Sine_ramper1 = 0;  //if sensor is outside of range, set sine to 0
                                 rawSine1 = 0;
 
                         }
                         //Serial.print(" rawSine1= ");
                         //Serial.print (rawSine1);
-                        sine_fm1.frequency(rawSine1);
-                        //sine_fm1.frequency(Sine_ramper);
-                        //Serial.print (" Sine_ramper ");
-                        //Serial.print (Sine_ramper);
+                        //sine_fm1.frequency(rawSine1);
+                        sine_fm1.frequency(Sine_ramper1);
+                        //Serial.print (" Sine_ramper1 ");
+                        //Serial.print (Sine_ramper1);
                      
 
 
@@ -121,22 +122,22 @@ void loop() {
                                 sine_fm1.amplitude(1.0);  //Set the amplitude, from 0 to 1.0.
                                 
                                 //inserted trying to ramp sine
-                      //           if (Sine_ramper < rawSine2) { //ramp up/down to sensor volume
-                      //                  Sine_ramper += 1;}
-                      //           else if (Sine_ramper > rawSine2) {
-                      //               Sine_ramper -= 1; }
+                                 if (Sine_ramper2 < rawSine2) { //ramp up/down to sensor volume
+                                        Sine_ramper2 += 1;}
+                                 else if (Sine_ramper2 > rawSine2) {
+                                     Sine_ramper2 -= 1; }
                         }
                         else {
-                                //Sine_ramper = 0;  //if sensor is outside of range, set sine to 0
+                                //Sine_ramper2 = 0;  //if sensor is outside of range, set sine to 0
                                 rawSine2 = 0;
 
                         }
                         //Serial.print(" rawSine2= ");
                         //Serial.println (rawSine2);
-                        sine_fm1.frequency(rawSine2);
-                        //sine_fm1.frequency(Sine_ramper);
-                        //Serial.print (" Sine_ramper ");
-                        //Serial.print (Sine_ramper);
+                        //sine_fm1.frequency(rawSine2);
+                        sine_fm1.frequency(Sine_ramper2);
+                        //Serial.print (" Sine_ramper2 ");
+                        //Serial.print (Sine_ramper2);
                      
                 }
         }
