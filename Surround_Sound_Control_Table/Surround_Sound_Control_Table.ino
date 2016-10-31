@@ -5,7 +5,7 @@
 
 // Change this to be at least as long as your pixel string (too long will work fine, just be a little slower)
 
-#define PIXELS 82  // Number of pixels in the inner lower string
+#define PIXELS 61  // Number of pixels in the inner lower string
 
 // These values depend on which pin your string is connected to and what board you are using 
 // More info on how to find these at http://www.arduino.cc/en/Reference/PortManipulation
@@ -226,6 +226,7 @@ void showFrame() {
 
 
 void setup() {
+  analogReference(DEFAULT);
   ledsetup();
   // sin^2(x) in radians so the waveform always stays positive
   int i;
@@ -252,23 +253,40 @@ void setup() {
 //  for (i = 0; i < QUANTA; i++) {
 //    beatAmplitude[QUANTA] = x;
 //  }
+  Serial.begin(9600);
 }
 
+#define SONAR_SENSOR_LBOUND 0
+#define SONAR_SENSOR_UBOUND 840
+#define SONAR_SENSOR_DIFF   (SONAR_SENSOR_UBOUND - SONAR_SENSOR_LBOUND)
+#define MAX_JUMP_VALUE 10
+int jumpScale = SONAR_SENSOR_DIFF / MAX_JUMP_VALUE;
 
 void loop() {
   // Some example procedures showing how to display to the pixels:
   showFrame();
   //showColor(255,255,255);
-  //stringOffset = stringOffset + map(analogRead(A0), 400, 1000, 0, 10);
-  stringOffset++;
+  int pinA0 = analogRead(A0);
+  int jump = 1;
+  if (pinA0 > 0) {
+    jump = min(max(0, (pinA0 - SONAR_SENSOR_LBOUND) / jumpScale), MAX_JUMP_VALUE);
+  }
+  stringOffset = stringOffset + jump;
   stringOffset %= QUANTA;
   counter++;
   if (counter % 2 == 0) {
     beatOffset = (beatOffset + 1) % QUANTA;
   }
-  //colorIndex = min(map(analogRead(A1), 400, 1000, 100, 0), QUANTA - 1);
-  colorIndex += 1;
-  colorIndex %= QUANTA;
+  int pinA1 = analogRead(A1);
+  if (pinA1 > 0) {
+    colorIndex = min(max(0, (pinA1 - SONAR_SENSOR_LBOUND) / (1.0 * SONAR_SENSOR_DIFF / QUANTA)), QUANTA - 1);
+  }
+  Serial.print(pinA0);
+  Serial.print("\t");
+  Serial.print(pinA1);
+  Serial.print("\t");
+  Serial.print(colorIndex);
+  Serial.println();
   if (counter % 20 == 0) {
     beatIntensity = (beatIntensity + 0.1);
     if (beatIntensity > 1.01)
