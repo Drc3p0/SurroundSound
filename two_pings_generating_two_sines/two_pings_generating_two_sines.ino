@@ -15,7 +15,7 @@ NewPing sonar2(PING_PIN_B, PING_PIN_B, MAX_DISTANCE);  //sonar[2] for frequency
 
 //timing and sensor vals
 const unsigned int SECOND = 1000;
-const unsigned int PING_CHECK_INTERVAL = SECOND / 75;  //how often the ultrasonic sensor is checked
+const unsigned int PING_CHECK_INTERVAL = 20;  //how often the ultrasonic sensor is checked
 unsigned long currentTime;
 unsigned long nextTime = 0;
 unsigned int rawSine2 = 0;
@@ -66,7 +66,8 @@ void setup() {
         // Configure the PWM bit depth & rate for the Teensy to 5 (0-31) and 125 kHz (LCM of highest supported rates given clock speed)
         analogWriteResolution(5);
         analogWriteFrequency(3, 125000);  // setting this on pin 3 will also affect pin 4
-        analogWriteFrequency(5, 125000);  // setting this on pin 5 will also affect pin 6, 9-10, and 20-23
+        //analogWriteFrequency(5, 125000);  // setting this on pin 5 will also affect pin 6, 9-10, and 20-23
+        //analogWriteFrequency(25, 125000);  // setting this on pin 25 will also affect pin 32
 }
 
 void loop() {
@@ -87,14 +88,9 @@ void loop() {
                                 //sine_fm1.frequency(rawSine1);
                                 //sine_fm1.phase(0); //angle 0-360                             
                                 sine_fm1.amplitude(1.0);  //Set the amplitude, from 0 to 1.0.
-                                
-                                //inserted trying to ramp sine
-                                 if (Sine_ramper1 < rawSine1) { //ramp up/down to sensor volume
-                                        Sine_ramper1 += 1;}
-                                 else if (Sine_ramper1 > rawSine1) {
-                                     Sine_ramper1 -= 1; }
+                                //analogWrite(3, rawPing1);  //led reactive testing
                         }
-                        else {
+                        else {                             
                                 //Sine_ramper1 = 0;  //if sensor is outside of range, set sine to 0
                                 rawSine1 = 0;
                                 limitedPing1 = 15;
@@ -108,8 +104,8 @@ void loop() {
                                 smoothedPing1 -= min(JUMP_FACTOR, smoothedPing1 - limitedPing1);
                         // drive it 3 times for the 3 devices we're sending data to
                         analogWrite(3, smoothedPing1);
-                        analogWrite(5, smoothedPing1);
-                        analogWrite(9, smoothedPing1);
+                        //analogWrite(5, smoothedPing1);
+                        //analogWrite(21, smoothedPing1);
                 }
                 //get values from ping 2
                 else {
@@ -125,12 +121,10 @@ void loop() {
                                 //sine_fm1.phase(0); //angle 0-360
 
                                 sine_fm1.amplitude(1.0);  //Set the amplitude, from 0 to 1.0.
+                               // analogWrite(4, rawPing2);  //testing led reactivity
+
                                 
-                                //inserted trying to ramp sine
-                                 if (Sine_ramper2 < rawSine2) { //ramp up/down to sensor volume
-                                        Sine_ramper2 += 1;}
-                                 else if (Sine_ramper2 > rawSine2) {
-                                     Sine_ramper2 -= 1; }
+
                         }
                         else {
                                 //Sine_ramper2 = 0;  //if sensor is outside of range, set sine to 0
@@ -146,8 +140,8 @@ void loop() {
                                 smoothedPing2 -= min(JUMP_FACTOR, smoothedPing2 - limitedPing2);
                         // drive it 3 times for the 3 devices we're sending data to
                         analogWrite(4, smoothedPing2);
-                        analogWrite(6, smoothedPing2);
-                        analogWrite(10, smoothedPing2);
+                        //analogWrite(20, smoothedPing2);
+                        //analogWrite(25, smoothedPing2);
                 }
         }
 
