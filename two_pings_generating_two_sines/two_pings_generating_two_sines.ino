@@ -126,7 +126,7 @@ void loop() {
                                 //sine_fm1.frequency(rawSine2);
                                 //sine_fm1.phase(0); //angle 0-360
 
-                                sine_fm1.amplitude(1.0);  //Set the amplitude, from 0 to 1.0.
+                                sine_fm2.amplitude(1.0);  //Set the amplitude, from 0 to 1.0.
                                // analogWrite(4, rawPing2);  //testing led reactivity
 
                                 
@@ -137,14 +137,21 @@ void loop() {
                                 rawSine2 = 0;
                                 limitedPing2 = 15;
                         }
-                        //inserted trying to ramp sine
-                        if (Sine_ramper2 < rawSine2) { //ramp up/down to sensor volume
-                            Sine_ramper2 += 2;}
-                        else if (Sine_ramper2 > rawSine2) {
-                            Sine_ramper2 -= 2; }
 
-                        sine_fm1.frequency(rawSine2);
-                        sine_fm1.frequency(Sine_ramper2);
+                     //inserted trying to ramp sine
+                       if (Sine_ramper2 < rawSine2) { //ramp up/down to sensor volume
+                           Sine_ramper2 += 2;}
+                       else if (Sine_ramper2 > rawSine2) {
+                            Sine_ramper2 -= 2; }                        
+
+                        //Serial.print(" rawPing1= ");
+                        //Serial.print (rawPing1);                        
+                        //Serial.print(" rawSine2= ");
+                        //Serial.println (rawSine2);
+                        //b sine_fm1.frequency(rawSine2);
+                        sine_fm2.frequency(Sine_ramper2);
+                        //Serial.print (" Sine_ramper2 ");
+                        //Serial.print (Sine_ramper2);
 
                         if (limitedPing2 > smoothedPing2)
                                 smoothedPing2 += min(JUMP_FACTOR, limitedPing2 - smoothedPing2);
