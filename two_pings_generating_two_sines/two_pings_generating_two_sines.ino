@@ -66,8 +66,8 @@ void setup() {
         // Configure the PWM bit depth & rate for the Teensy to 5 (0-31) and 125 kHz (LCM of highest supported rates given clock speed)
         analogWriteResolution(5);
         analogWriteFrequency(3, 125000);  // setting this on pin 3 will also affect pin 4
-        //analogWriteFrequency(5, 125000);  // setting this on pin 5 will also affect pin 6, 9-10, and 20-23
-        //analogWriteFrequency(25, 125000);  // setting this on pin 25 will also affect pin 32
+        analogWriteFrequency(5, 125000);  // setting this on pin 5 will also affect pin 6, 9-10, and 20-23
+        analogWriteFrequency(25, 125000);  // setting this on pin 25 will also affect pin 32
 }
 
 void loop() {
@@ -110,8 +110,8 @@ void loop() {
                                 smoothedPing1 -= min(JUMP_FACTOR, smoothedPing1 - limitedPing1);
                         // drive it 3 times for the 3 devices we're sending data to
                         analogWrite(3, smoothedPing1);
-                        //analogWrite(5, smoothedPing1);
-                        //analogWrite(21, smoothedPing1);
+                        analogWrite(5, smoothedPing1);
+                        analogWrite(21, smoothedPing1);
                 }
                 //get values from ping 2
                 else {
@@ -152,8 +152,8 @@ void loop() {
                                 smoothedPing2 -= min(JUMP_FACTOR, smoothedPing2 - limitedPing2);
                         // drive it 3 times for the 3 devices we're sending data to
                         analogWrite(4, smoothedPing2);
-                        //analogWrite(20, smoothedPing2);
-                        //analogWrite(25, smoothedPing2);
+                        analogWrite(20, smoothedPing2);
+                        analogWrite(25, smoothedPing2);
                 }
         }
 
