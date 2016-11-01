@@ -125,7 +125,7 @@ void loop() {
                                 //sine_fm1.frequency(rawSine2);
                                 //sine_fm1.phase(0); //angle 0-360
 
-                                sine_fm1.amplitude(1.0);  //Set the amplitude, from 0 to 1.0.
+                                sine_fm2.amplitude(1.0);  //Set the amplitude, from 0 to 1.0.
                                // analogWrite(4, rawPing2);  //testing led reactivity
 
                                 
@@ -149,7 +149,7 @@ void loop() {
                         //Serial.print(" rawSine2= ");
                         //Serial.println (rawSine2);
                         //b sine_fm1.frequency(rawSine2);
-                        sine_fm1.frequency(Sine_ramper2);
+                        sine_fm2.frequency(Sine_ramper2);
                         //Serial.print (" Sine_ramper2 ");
                         //Serial.print (Sine_ramper2);
                      
