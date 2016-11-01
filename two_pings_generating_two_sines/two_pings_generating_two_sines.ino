@@ -95,6 +95,12 @@ void loop() {
                                 rawSine1 = 0;
                                 limitedPing1 = 15;
                         }
+                        //inserted trying to ramp sine
+                        if (Sine_ramper1 < rawSine1) { //ramp up/down to sensor volu
+                          Sine_ramper1 += 2;}
+                        else if (Sine_ramper1 > rawSine1) {
+                          Sine_ramper1 -= 2; } 
+
                         //sine_fm1.frequency(rawSine1);
                         sine_fm1.frequency(Sine_ramper1);
 
@@ -131,7 +137,13 @@ void loop() {
                                 rawSine2 = 0;
                                 limitedPing2 = 15;
                         }
-                        //sine_fm1.frequency(rawSine2);
+                        //inserted trying to ramp sine
+                        if (Sine_ramper2 < rawSine2) { //ramp up/down to sensor volume
+                            Sine_ramper2 += 2;}
+                        else if (Sine_ramper2 > rawSine2) {
+                            Sine_ramper2 -= 2; }
+
+                        sine_fm1.frequency(rawSine2);
                         sine_fm1.frequency(Sine_ramper2);
 
                         if (limitedPing2 > smoothedPing2)
