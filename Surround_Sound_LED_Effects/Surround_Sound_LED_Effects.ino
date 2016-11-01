@@ -278,7 +278,7 @@ void setup() {
 #define SONAR_SENSOR_LBOUND 300
 #define SONAR_SENSOR_UBOUND 1000
 #define SONAR_SENSOR_DIFF   (SONAR_SENSOR_UBOUND - SONAR_SENSOR_LBOUND)
-#define MAX_JUMP_VALUE 12
+#define MAX_JUMP_VALUE 10
 int jumpScale = SONAR_SENSOR_DIFF / MAX_JUMP_VALUE;
 
 void loop() {
@@ -289,7 +289,7 @@ void loop() {
     int pinA0 = analogRead(A0);
   int jump = 1;
   if (pinA0 > 0) {
-    jump = min(max(2, (pinA0 - SONAR_SENSOR_LBOUND) / jumpScale), MAX_JUMP_VALUE);
+    jump = min(max(0, (pinA0 - SONAR_SENSOR_LBOUND) / jumpScale), MAX_JUMP_VALUE) + 4;
   }
   stringOffset = stringOffset + jump;
   stringOffset %= QUANTA;
