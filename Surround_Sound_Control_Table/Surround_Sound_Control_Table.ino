@@ -5,7 +5,7 @@
 
 // Change this to be at least as long as your pixel string (too long will work fine, just be a little slower)
 
-#define PIXELS 61  // Number of pixels in the inner lower string
+#define PIXELS 160  // Number of pixels in the inner lower string
 
 // These values depend on which pin your string is connected to and what board you are using 
 // More info on how to find these at http://www.arduino.cc/en/Reference/PortManipulation
@@ -241,9 +241,9 @@ void setup() {
   for (int i = 0, x = 0; i < QUANTA; i++, x += (2 * 100 / QUANTA)) {
     redColor[i] = (i > QUANTA / 2) ? 100 : x;
   }
-  // blue value starts = 0 and peaks at 1 at QUANTA/2 then drops back to 0
+  // green value starts = 0 and peaks at 1 at QUANTA/2 then drops back to 0
   for (int i = 0, x = -100; i < QUANTA; i++, x += (2 * 100 / QUANTA)) {
-    greenColor[i] = -1 * abs(x) + 100;
+    greenColor[i] = 100 * overallAmplitude[i];
   }
   // blue value starts = 1 and shrinks from x = QUANTA/2 to x = QUANTA down to 0
   for (int i = 0, x = 2; i < QUANTA; i++, x -= (2 * 100 / QUANTA)) {
@@ -256,8 +256,8 @@ void setup() {
   Serial.begin(9600);
 }
 
-#define SONAR_SENSOR_LBOUND 0
-#define SONAR_SENSOR_UBOUND 840
+#define SONAR_SENSOR_LBOUND 300
+#define SONAR_SENSOR_UBOUND 1000
 #define SONAR_SENSOR_DIFF   (SONAR_SENSOR_UBOUND - SONAR_SENSOR_LBOUND)
 #define MAX_JUMP_VALUE 10
 int jumpScale = SONAR_SENSOR_DIFF / MAX_JUMP_VALUE;
@@ -278,13 +278,13 @@ void loop() {
     beatOffset = (beatOffset + 1) % QUANTA;
   }
   int pinA1 = analogRead(A1);
-  if (pinA1 > 0) {
+  if (pinA1 > -1) {
     colorIndex = min(max(0, (pinA1 - SONAR_SENSOR_LBOUND) / (1.0 * SONAR_SENSOR_DIFF / QUANTA)), QUANTA - 1);
+    //colorIndex += 1;
+    //colorIndex %= 100;
   }
-  Serial.print(pinA0);
-  Serial.print("\t");
-  Serial.print(pinA1);
-  Serial.print("\t");
+//  Serial.print(pinA0);
+//  Serial.print("\t");
   Serial.print(colorIndex);
   Serial.println();
   if (counter % 20 == 0) {

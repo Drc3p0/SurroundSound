@@ -247,6 +247,7 @@ void showFrame() {
 
 void setup() {
   ledsetup();
+  Serial.begin(9600);
   // sin^2(x) in radians so the waveform always stays positive
   int i;
   float x;
@@ -274,19 +275,39 @@ void setup() {
 //  }
 }
 
+#define SONAR_SENSOR_LBOUND 300
+#define SONAR_SENSOR_UBOUND 1000
+#define SONAR_SENSOR_DIFF   (SONAR_SENSOR_UBOUND - SONAR_SENSOR_LBOUND)
+#define MAX_JUMP_VALUE 12
+int jumpScale = SONAR_SENSOR_DIFF / MAX_JUMP_VALUE;
 
 void loop() {
   // Some example procedures showing how to display to the pixels:
   showFrame();
   //showColor(255,255,255);
-  stringOffset = (stringOffset + 1) % QUANTA;
+  //stringOffset = (stringOffset + 1) % QUANTA;
+    int pinA0 = analogRead(A0);
+  int jump = 1;
+  if (pinA0 > 0) {
+    jump = min(max(2, (pinA0 - SONAR_SENSOR_LBOUND) / jumpScale), MAX_JUMP_VALUE);
+  }
+  stringOffset = stringOffset + jump;
+  stringOffset %= QUANTA;
   counter++;
   if (counter % 2 == 0) {
     beatOffset = (beatOffset + 1) % QUANTA;
   }
-  if (counter % 4 == 0) {
-    colorIndex = (int) 49 - (49 * cos(counter / 200.0 * PI));
+  int pinA1 = analogRead(A1);
+  if (pinA1 > -1) {
+    colorIndex = min(max(0, (pinA1 - SONAR_SENSOR_LBOUND) / (1.0 * SONAR_SENSOR_DIFF / QUANTA)), QUANTA - 1);
+    //colorIndex += 1;
+    //colorIndex %= 100;
   }
+//    Serial.print(colorIndex);
+//  Serial.print("\t");
+  Serial.print(pinA1);
+  Serial.println();
+
   if (counter % 20 == 0) {
     beatIntensity = (beatIntensity + 0.1);
     if (beatIntensity > 1.01)
