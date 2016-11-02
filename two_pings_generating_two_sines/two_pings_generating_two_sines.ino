@@ -64,6 +64,10 @@ void setup() {
         //Serial.begin(115200); //higher baud for ping
         //Serial1.begin(115200);
         // Configure the PWM bit depth & rate for the Teensy to 5 (0-31) and 125 kHz (LCM of highest supported rates given clock speed)
+        //added to help 
+        mixer.gain(0,1.0);
+        mixer.gain(1,1.0);
+        mixer.gain(2,1.0);
         analogWriteResolution(5);
         analogWriteFrequency(3, 125000);  // setting this on pin 3 will also affect pin 4
         analogWriteFrequency(5, 125000);  // setting this on pin 5 will also affect pin 6, 9-10, and 20-23
@@ -81,9 +85,9 @@ void loop() {
                         rawPing1 = sonar1.ping_cm(); //raw ultrasonic value
 
                       //sine generator interjected into 1st ping check
-                        if (rawPing1 >= 1 && rawPing1 <= 30) { //if sensor is triggered within the detection range
+                        if (rawPing1 >= 1 && rawPing1 <= 35) { //if sensor is triggered within the detection range
                                 limitedPing1 = rawPing1;
-                                rawSine1 =  map(rawPing1, 0, 30, 20, 250);//map it to the frequency range desired...  could this be done on a logarithmic curve??
+                                rawSine1 =  map(rawPing1, 0, 35, 20, 300);//map it to the frequency range desired...  could this be done on a logarithmic curve??
                                 
                                 //sine_fm1.frequency(rawSine1);
                                 //sine_fm1.phase(0); //angle 0-360                             
@@ -119,9 +123,9 @@ void loop() {
                         whichPing = 1;
 
                         //sine generator interjected into 2nd ping check
-                        if (rawPing2 >= 1 && rawPing2 <= 30) { //if sensor is triggered within the detection range
+                        if (rawPing2 >= 1 && rawPing2 <= 35) { //if sensor is triggered within the detection range
                                 limitedPing2 = rawPing2;
-                                rawSine2 =  map(rawPing2, 0, 30, 20, 250);//map it to the frequency range desired...  could this be done on a logarithmic curve??
+                                rawSine2 =  map(rawPing2, 0, 35, 20, 300);//map it to the frequency range desired...  could this be done on a logarithmic curve??
                                 
                                 //sine_fm1.frequency(rawSine2);
                                 //sine_fm1.phase(0); //angle 0-360
