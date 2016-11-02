@@ -111,7 +111,7 @@ void loop() {
                         // drive it 3 times for the 3 devices we're sending data to
                         analogWrite(3, smoothedPing1);
                         analogWrite(5, smoothedPing1);
-                        analogWrite(21, smoothedPing1);
+                        analogWrite(25, smoothedPing1);
                 }
                 //get values from ping 2
                 else {
@@ -159,8 +159,8 @@ void loop() {
                                 smoothedPing2 -= min(JUMP_FACTOR, smoothedPing2 - limitedPing2);
                         // drive it 3 times for the 3 devices we're sending data to
                         analogWrite(4, smoothedPing2);
-                        analogWrite(20, smoothedPing2);
-                        analogWrite(25, smoothedPing2);
+                        analogWrite(21, smoothedPing2);
+                        analogWrite(32, smoothedPing2);
                 }
         }
 
