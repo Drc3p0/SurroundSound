@@ -5,7 +5,7 @@
 
 // Change this to be at least as long as your pixel string (too long will work fine, just be a little slower)
 
-#define PIXELS 80  // Number of pixels in the inner lower string
+#define PIXELS 160  // Number of pixels in the inner lower string
 
 // These values depend on which pin your string is connected to and what board you are using 
 // More info on how to find these at http://www.arduino.cc/en/Reference/PortManipulation
@@ -177,7 +177,7 @@ void show() {
 
 void showColor(unsigned char r, unsigned char g, unsigned char b) {
   cli();
-  for (int p = 0; p < 2; p++) {
+  for (int p = 0; p < 20; p++) {
     sendPixel( r , g , b );
   }
   sei();
@@ -204,8 +204,8 @@ void showFrame() {
   for (int p = 0; p < PIXELS; p++) {
     sendPixel(rVal[p], gVal[p], bVal[p]);
   }
-  sei();
   show();
+  sei();
 }
 
 
@@ -226,6 +226,7 @@ void showFrame() {
 
 
 void setup() {
+  analogReference(DEFAULT);
   ledsetup();
   // sin^2(x) in radians so the waveform always stays positive
   int i;
@@ -240,9 +241,9 @@ void setup() {
   for (int i = 0, x = 0; i < QUANTA; i++, x += (2 * 100 / QUANTA)) {
     redColor[i] = (i > QUANTA / 2) ? 100 : x;
   }
-  // blue value starts = 0 and peaks at 1 at QUANTA/2 then drops back to 0
+  // green value starts = 0 and peaks at 1 at QUANTA/2 then drops back to 0
   for (int i = 0, x = -100; i < QUANTA; i++, x += (2 * 100 / QUANTA)) {
-    greenColor[i] = -1 * abs(x) + 100;
+    greenColor[i] = 100 * overallAmplitude[i];
   }
   // blue value starts = 1 and shrinks from x = QUANTA/2 to x = QUANTA down to 0
   for (int i = 0, x = 2; i < QUANTA; i++, x -= (2 * 100 / QUANTA)) {
@@ -252,21 +253,40 @@ void setup() {
 //  for (i = 0; i < QUANTA; i++) {
 //    beatAmplitude[QUANTA] = x;
 //  }
+  Serial.begin(9600);
 }
 
+#define SONAR_SENSOR_LBOUND 300
+#define SONAR_SENSOR_UBOUND 1000
+#define SONAR_SENSOR_DIFF   (SONAR_SENSOR_UBOUND - SONAR_SENSOR_LBOUND)
+#define MAX_JUMP_VALUE 10
+int jumpScale = SONAR_SENSOR_DIFF / MAX_JUMP_VALUE;
 
 void loop() {
   // Some example procedures showing how to display to the pixels:
   showFrame();
   //showColor(255,255,255);
-  stringOffset = (stringOffset + 1) % QUANTA;
+  int pinA0 = analogRead(A0);
+  int jump = 1;
+  if (pinA0 > 0) {
+    jump = min(max(0, (pinA0 - SONAR_SENSOR_LBOUND) / jumpScale), MAX_JUMP_VALUE);
+  }
+  stringOffset = stringOffset + jump;
+  stringOffset %= QUANTA;
   counter++;
   if (counter % 2 == 0) {
     beatOffset = (beatOffset + 1) % QUANTA;
   }
-  if (counter % 4 == 0) {
-    colorIndex = (int) 49 - (49 * cos(counter / 200.0 * PI));
+  int pinA1 = analogRead(A1);
+  if (pinA1 > -1) {
+    colorIndex = min(max(0, (pinA1 - SONAR_SENSOR_LBOUND) / (1.0 * SONAR_SENSOR_DIFF / QUANTA)), QUANTA - 1);
+    //colorIndex += 1;
+    //colorIndex %= 100;
   }
+//  Serial.print(pinA0);
+//  Serial.print("\t");
+  Serial.print(colorIndex);
+  Serial.println();
   if (counter % 20 == 0) {
     beatIntensity = (beatIntensity + 0.1);
     if (beatIntensity > 1.01)
