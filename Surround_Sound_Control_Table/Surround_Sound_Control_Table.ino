@@ -226,7 +226,7 @@ void showFrame() {
 
 
 void setup() {
-  analogReference(DEFAULT);
+  analogReference(EXTERNAL);
   ledsetup();
   // sin^2(x) in radians so the waveform always stays positive
   int i;
@@ -256,8 +256,8 @@ void setup() {
   Serial.begin(9600);
 }
 
-#define SONAR_SENSOR_LBOUND 300
-#define SONAR_SENSOR_UBOUND 1000
+#define SONAR_SENSOR_LBOUND 50
+#define SONAR_SENSOR_UBOUND 900
 #define SONAR_SENSOR_DIFF   (SONAR_SENSOR_UBOUND - SONAR_SENSOR_LBOUND)
 #define MAX_JUMP_VALUE 10
 int jumpScale = SONAR_SENSOR_DIFF / MAX_JUMP_VALUE;
@@ -279,12 +279,14 @@ void loop() {
   }
   int pinA1 = analogRead(A1);
   if (pinA1 > -1) {
-    colorIndex = min(max(0, (pinA1 - SONAR_SENSOR_LBOUND) / (1.0 * SONAR_SENSOR_DIFF / QUANTA)), QUANTA - 1);
+    colorIndex = min(max(0, (pinA1 - SONAR_SENSOR_LBOUND + 40) / (1.0 * SONAR_SENSOR_DIFF / QUANTA)), QUANTA - 1);
     //colorIndex += 1;
     //colorIndex %= 100;
   }
-//  Serial.print(pinA0);
-//  Serial.print("\t");
+  Serial.print(pinA0);
+  Serial.print("\t");
+  Serial.print(pinA1);
+  Serial.print("\t");
   Serial.print(colorIndex);
   Serial.println();
   if (counter % 20 == 0) {
